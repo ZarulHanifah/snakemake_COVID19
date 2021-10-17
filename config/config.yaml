@@ -1,0 +1,6 @@
+---
+fastq_dir_path:
+    input_folder/ALL_FASTQ
+human_index:
+    /home/zarul/Zarul/db/human_GRCh38_INDEX/GRCh38_noalt_as
+...

@@ -1,0 +1,6 @@
+name: samcov
+channels:
+- bioconda
+- conda-forge
+dependencies:
+- samtools=1.11

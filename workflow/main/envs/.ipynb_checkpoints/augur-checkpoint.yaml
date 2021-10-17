@@ -1,0 +1,6 @@
+name: augur
+channels:
+- bioconda
+- conda-forge
+dependencies:
+- augur
