@@ -36,9 +36,8 @@ rule bowtie2_align:
 		bowtie2 -x {input.index}/idx -1 {input.r1} -2 {input.r2} --very-sensitive-local 2> {log} | \
 		 samtools sort | \
 		 samtools view -bS -F 4 -o {output.bam1} 
-		
 
-		ivar trim -i {output.bam1} -b {input.primers_bed} -p {params.prefix}
+		ivar trim -i {output.bam1} -b {input.primers_bed} -p {params.prefix} &>> {log}
 
 		samtools sort {output.bam2} -o {output.bam3}
 		samtools index {output.bam3}

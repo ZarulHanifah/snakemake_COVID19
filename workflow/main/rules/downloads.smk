@@ -39,19 +39,3 @@ rule download_ref_genome_gff:
 		ncbi-acc-download -F fasta -o {output.fasta} {params.acc}
 		ncbi-acc-download -F gff3 -o {output.gff} {params.acc}
 		"""
-
-rule download_pangolin:
-	output:
-		directory("pangolin")
-	params:
-		github_link = "https://github.com/cov-lineages/pangolin.git"
-	conda:
-		"../envs/pangolin.yaml"
-	shell:
-		"""
-		git clone {params.github_link}
-		
-		cd {output}
-		
-		pip install .
-		"""

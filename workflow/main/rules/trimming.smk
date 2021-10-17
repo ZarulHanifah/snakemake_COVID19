@@ -26,5 +26,5 @@ rule trimmomatic_pe:
 		 SLIDINGWINDOW:{params.slidingwindow} \
 		 LEADING:{params.leading}\
 		 TRAILING:{params.trailing}\
-		 MINLEN:{params.minlen} 1>{log} 2>{log}
+		 MINLEN:{params.minlen} &>{log}
 		"""
