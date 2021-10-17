@@ -1,10 +1,5 @@
-# snakemake_16Sworkflow
+# snakemake_COVID19
 
-My Snakemake implementation for 16S analysis. If you have snakemake installed, then all other software installation will be managed by Snakemake.
+My Snakemake implementation for COVID19 analysis. This is geared towards Illumina data.
 
-# How to visualise the data
-If you find "qzv" files, you can visualize it one [QIIME 2 View](https://view.qiime2.org/)
-
-# Current plans for the pipeline
-- main_16S
-- picrust2
+If you have snakemake installed, then all other software installation will be managed by Snakemake.
