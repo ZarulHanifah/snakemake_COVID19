@@ -1,14 +1,14 @@
-rule download_nextera_pe_adaptors_fasta:
+rule download_adaptors_fasta:
 	output:
-		"results/NexteraPE-PE.fa"
+		temp("results/adapters.fa")
 	params:
-		trimmomatic_link = "https://github.com/timflutre/trimmomatic",
-		nextera_location = "trimmomatic/adapters/NexteraPE-PE.fa"
+		link = "https://github.com/BioInfoTools/BBMap.git",
+		adapter_file = "BBMap/resources/adapters.fa"
 	shell:
 		"""
-		git clone {params.trimmomatic_link}
-		cp {params.nextera_location} {output}
-		rm -rf trimmomatic
+		git clone {params.link}
+		cp {params.adapter_file} {output}
+		rm -rf $(dirname $(dirname {params.adapter_file}))
 		"""
 
 rule download_primerscheme_reference:
