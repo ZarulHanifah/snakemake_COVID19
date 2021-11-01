@@ -1,0 +1,6 @@
+name: usher
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - usher

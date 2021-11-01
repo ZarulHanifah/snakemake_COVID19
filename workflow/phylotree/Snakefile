@@ -1,0 +1,33 @@
+
+configfile: "../../config/config.yaml"
+
+import sys
+import os
+import re
+import numpy as np
+import pandas as pd
+
+samples, = glob_wildcards(os.path.join("../../", config["fastq_dir_path"], "{sample}_R1_.fastq.gz"))
+
+if len(samples) == 0:
+	print("No samples detected")
+	sys.exit(1)
+
+include: "rules/downloads.smk"
+include: "rules/trimming.smk"
+include: "rules/read_mapping.smk"
+include: "rules/gen_consensus.smk"
+include: "rules/ind_qc.smk"
+include: "rules/compile_qc.smk"
+include: "rules/lineage_assignment.smk"
+include: "rules/build_tree.smk"
+
+localrules:
+	all
+
+rule all:
+	input:
+		rules.compile_stats_qc.output,
+		rules.compile_assemblyStats.output,
+		rules.compile_samtools_coverage_qc.output,
+		rules.assign_pangolin_lineage.output.report
