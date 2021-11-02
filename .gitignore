@@ -2,3 +2,5 @@ input_folder
 results
 .snakemake
 *USM*
+*tmp*
+*temp*

@@ -48,7 +48,7 @@ rule ivar_call_variants:
 			--threads {threads} \
 			{input.bam} 2> {log} | \
 		bcftools call --ploidy {params.ploidy} \
-			--threads {threads} -m -Oz -o {output.vcf} 2>> {log}
+			--threads {threads} -v -m -Oz -o {output.vcf} 2>> {log}
 
 		bcftools index {output.vcf}
 
@@ -68,6 +68,11 @@ rule merge_variant_calls:
 		"../envs/bowtie2.yaml"
 	shell:
 		"""
-		bcftools merge -o {output} \
+		header=$(for i in {input} ; do basename $i | sed "s/\..*//" ; done | tr "\n" " ")
+		headerfile=$(echo {output} | sed "s/\..*/\.header/")
+	
+		echo $header > $headerfile
+
+		bcftools merge --use-header $headerfile -o {output} \
 			{input}
 		"""
