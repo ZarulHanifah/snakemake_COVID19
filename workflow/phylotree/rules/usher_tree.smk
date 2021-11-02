@@ -6,11 +6,27 @@ rule convert_global_files_to_mat:
 		"results/preprocessing/global_phylo.pb"
 	conda:
 		"../envs/usher.yaml"
+	shell:
+		"""
+		usher --tree {input.global_phylo} \
+			--vcf {input.global_samples} \
+			--collapse-tree \
+			--save-mutation-annotated-tree {output}
+		"""
 
+rule incorporate_sample_vcf_to_tree:
+	input:
+		input_vcf = config[""]
+		global_mat = rules.convert_global_files_to_mat.output
+	output:
+		""
+	conda:
+		"../envs/usher.yaml"
+	shell:
+		"""
+		usher --vcf {input.input_vcf} \
+			--load-mutation-annotated-tree {input.global_mat} \
+			--write-uncondensed-final-tree
+		"""
 
-
-
-usher --tree global_phylo.nh --vcf global_samples.vcf --collapse-tree --save-mutation-annotated-tree global_phylo.pb
-
-usher --vcf new_samples.vcf --load-mutation-annotated-tree global_phylo.pb --write-uncondensed-final-tree
 

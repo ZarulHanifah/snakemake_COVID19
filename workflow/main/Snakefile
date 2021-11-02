@@ -30,4 +30,5 @@ rule all:
 		rules.compile_stats_qc.output,
 		rules.compile_assemblyStats.output,
 		rules.compile_samtools_coverage_qc.output,
-		rules.assign_pangolin_lineage.output.report
+		rules.assign_pangolin_lineage.output.report,
+		rules.merge_variant_calls.output

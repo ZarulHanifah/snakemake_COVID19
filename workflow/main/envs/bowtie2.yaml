@@ -6,3 +6,4 @@ dependencies:
 - samtools
 - bcftools
 - bedtools
+- openssl=1.0

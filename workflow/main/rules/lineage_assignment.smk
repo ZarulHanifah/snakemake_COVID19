@@ -9,10 +9,10 @@ rule assign_pangolin_lineage:
 	threads: 8
 	shell:
 		"""
-		pangolin --update
-
 		cat {input} |\
 		 sed "s/>Consensus_/>/" |\
 		 sed "s/\.consensus.*//" > {output.concat_fasta}
+		
+		pangolin --update
 		pangolin -t {threads} {output.concat_fasta} --outfile {output.report}
 		"""
