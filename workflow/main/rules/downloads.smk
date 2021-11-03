@@ -39,3 +39,15 @@ rule download_ref_genome_gff:
 		ncbi-acc-download -F fasta -o {output.fasta} {params.acc}
 		ncbi-acc-download -F gff3 -o {output.gff} {params.acc}
 		"""
+
+rule index_fasta:
+	input:
+		rules.download_ref_genome_gff.output.fasta
+	output:
+		"results/Wuhan-Hu.fasta.fai"
+	conda:
+		"../envs/bowtie2.yaml"
+	shell:
+		"""
+		samtools index {input}
+		"""

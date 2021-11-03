@@ -28,6 +28,7 @@ rule ivar_call_variants:
 		gff = rules.download_ref_genome_gff.output.gff,
 		bam = rules.bowtie2_align.output.bam3
 	output:
+		_samplename = temp("results/variant_calls/{sample}.name"),
 		vcf = "results/variant_calls/{sample}.vcf.gz",
 		tsv = "results/variant_calls/{sample}.tsv"
 	conda:
@@ -43,36 +44,40 @@ rule ivar_call_variants:
 	shell:
 		"""
 		prefix=$(echo {output.tsv} | sed "s/\.tsv//")		
-
-		bcftools mpileup -f {input.ref} \
-			--threads {threads} \
-			{input.bam} 2> {log} | \
-		bcftools call --ploidy {params.ploidy} \
-			--threads {threads} -v -m -Oz -o {output.vcf} 2>> {log}
-
-		bcftools index {output.vcf}
+		
+		echo {wildcards.sample} > {output._samplename}
 
 		samtools mpileup -aa -A -B -d {params.min_depth} \
 			-Q {params.min_baseq} \
 			--reference {input.ref} \
 			{input.bam} 2>> {log} | \
-		ivar variants -p $prefix  2>> {log}
+		 ivar variants -p $prefix  2>> {log}
+
+		bcftools mpileup -f {input.ref} \
+			--threads {threads} \
+			{input.bam} 2> {log} | \
+		 bcftools call --ploidy {params.ploidy} \
+			--threads {threads} -v -m  2>> {log} | \
+		 bcftools reheader -s {output._samplename} \
+		 	--threads {threads} \
+			-o {output.vcf}
+
+		bcftools index {output.vcf}
 		"""
 
 rule merge_variant_calls:
 	input:
 		expand(rules.ivar_call_variants.output.vcf, sample = samples)
 	output:
-		"results/variantcalls.vcf.gz"
+		vcf = "results/variantcalls.vcf.gz"
 	conda:
 		"../envs/bowtie2.yaml"
+	threads: 8
+	log:
+		"results/log/merge_variant_calls/log.log"
 	shell:
 		"""
-		header=$(for i in {input} ; do basename $i | sed "s/\..*//" ; done | tr "\n" " ")
-		headerfile=$(echo {output} | sed "s/\..*/\.header/")
-	
-		echo $header > $headerfile
-
-		bcftools merge --use-header $headerfile -o {output} \
-			{input}
+		bcftools merge -o {output.vcf} \
+			--threads {threads} -0 \
+			{input} 2> {log}
 		"""
