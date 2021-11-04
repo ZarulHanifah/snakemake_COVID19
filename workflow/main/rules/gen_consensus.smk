@@ -19,7 +19,7 @@ rule gen_consensus_fasta:
         sed -i "s/>Consensus_/>/" {output}
         sed -i "s/\.consensus.*//" {output}
 
-        rm -rf 
+        rm -rf $(dirname {output})/{wildcards.sample}.consensus.fa
 		"""
 
 rule ivar_call_variants:

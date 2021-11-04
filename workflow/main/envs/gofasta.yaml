@@ -1,0 +1,7 @@
+name: gofasta
+channels:
+- bioconda
+- conda-forge
+dependencies:
+- minimap2
+- gofasta
