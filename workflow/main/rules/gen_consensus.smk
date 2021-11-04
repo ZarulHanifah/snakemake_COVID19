@@ -51,7 +51,9 @@ rule ivar_call_variants:
 			-Q {params.min_baseq} \
 			--reference {input.ref} \
 			{input.bam} 2>> {log} | \
-		 ivar variants -p $prefix  2>> {log}
+		 ivar variants -p $prefix \
+		 	-r {input.ref} \
+		 	-g {input.gff}  2>> {log}
 
 		bcftools mpileup -f {input.ref} \
 			--threads {threads} \
@@ -59,7 +61,8 @@ rule ivar_call_variants:
 		 bcftools call --ploidy {params.ploidy} \
 			--threads {threads} -v -m  2>> {log} | \
 		 bcftools reheader -s {output._samplename} \
-		 	--threads {threads} \
+		 	--threads {threads} | \
+		 bcftools view -Oz \
 			-o {output.vcf}
 
 		bcftools index {output.vcf}

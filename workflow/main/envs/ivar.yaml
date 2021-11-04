@@ -1,9 +1,12 @@
 name: ivar
 channels:
 - bioconda
+- conda-forge
 dependencies:
 - bowtie2
 - samtools
 - bcftools
 - bedtools
 - ivar
+- openssl
+- tbb

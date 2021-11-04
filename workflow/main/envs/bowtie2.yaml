@@ -1,9 +1,11 @@
 name: bowtie2
 channels:
 - bioconda
+- conda-forge
 dependencies:
 - bowtie2
 - samtools
 - bcftools
 - bedtools
-- openssl=1.0
+- openssl
+- tbb
