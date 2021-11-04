@@ -47,7 +47,7 @@ rule human_align:
 	input:
 		r1 = rules.trimmomatic_pe.output.r1,
 		r2 = rules.trimmomatic_pe.output.r2,
-		index = config["human_index"]
+		idx_dir = config["human_index_dir"]
 	output:
 		"results/human_bowtie2_align/{sample}.bam"
 	conda:
@@ -56,10 +56,10 @@ rule human_align:
 	log:
 		"results/log/human_bowtie2_align/{sample}.log"
 	params:
-		idx = "/home/zarul/Zarul/db/human_GRCh38_INDEX/GRCh38_noalt_as/GRCh38_noalt_as"
+		idx_prefix = "GRCh38_noalt_as"
 	shell:
 		"""
-		bowtie2 -x {params.idx} -1 {input.r1} -2 {input.r2}  2> {log} |
+		bowtie2 -x {input.idx_dir}/{params.idx_prefix} -1 {input.r1} -2 {input.r2}  2> {log} |
 		 samtools view -bS  - | \
 		 samtools sort -O BAM -o {output}
 		"""
