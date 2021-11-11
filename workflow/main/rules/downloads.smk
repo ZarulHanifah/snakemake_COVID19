@@ -1,6 +1,6 @@
 rule download_adaptors_fasta:
 	output:
-		temp("results/adapters.fa")
+		"results/adapters.fa"
 	params:
 		link = "https://github.com/BioInfoTools/BBMap.git",
 		adapter_file = "BBMap/resources/adapters.fa"

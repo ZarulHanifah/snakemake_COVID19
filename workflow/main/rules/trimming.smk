@@ -2,7 +2,7 @@ rule trimmomatic_pe:
 	input:
 		r1 = os.path.join("../../", config["fastq_dir_path"], "{sample}_R1_.fastq.gz"),
 		r2 = os.path.join("../../", config["fastq_dir_path"], "{sample}_R2_.fastq.gz"),
-		adapter = rules.download_adaptors_fasta.output
+		adapter = ancient(rules.download_adaptors_fasta.output)
 	output:
 		r1 = "results/trimmed/{sample}_R1_.fastq.gz",
 		r2 = "results/trimmed/{sample}_R2_.fastq.gz"

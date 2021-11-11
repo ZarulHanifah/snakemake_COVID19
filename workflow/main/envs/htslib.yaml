@@ -8,3 +8,4 @@ dependencies:
 - bcftools
 - bowtie2
 - tabix
+- pandas

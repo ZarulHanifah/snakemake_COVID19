@@ -34,12 +34,15 @@ rule compile_samtools_coverage_qc:
 rule compile_stats_qc:
 	input:
 		cov_bam = expand(rules.bowtie2_align.output.bam3, sample = samples),
-		human_bam = expand(rules.human_align.log, sample = samples)
+		human_bam = expand(rules.human_align.log, sample = samples),
+		assemstats = rules.compile_assemblyStats.output
 	output:
-		"results/basic_summary_stats_qc.tsv"
+		pre = "results/pre_summary_stats_qc.tsv",
+		final = "results/basic_summary_stats_qc.tsv",
 	conda:
 		"../envs/htslib.yaml"
 	shell:
 		"""
-		bash src/stats.sh > {output}
+		bash src/stats.sh > {output.pre}
+		python src/merge_stats.py {output.pre} {input.assemstats} > {output.final}
 		"""
