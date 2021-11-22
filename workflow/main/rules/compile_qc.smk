@@ -34,6 +34,7 @@ rule compile_samtools_coverage_qc:
 rule compile_stats_qc:
 	input:
 		cov_bam = expand(rules.bowtie2_align.output.bam3, sample = samples),
+		cov_fasta = expand(rules.create_single_alignment.output, sample = samples),
 		human_bam = expand(rules.human_align.log, sample = samples),
 		assemstats = rules.compile_assemblyStats.output
 	output:

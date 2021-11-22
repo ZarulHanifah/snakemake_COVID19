@@ -9,3 +9,4 @@ dependencies:
 - bowtie2
 - tabix
 - pandas
+- biopython

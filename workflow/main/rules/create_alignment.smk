@@ -33,3 +33,39 @@ rule create_multialignment:
 			-s {input.sam} \
 			-t {threads} 2> {log}
 		"""
+
+rule align_single_genome_to_ref:
+	input:
+		fasta = rules.gen_consensus_fasta.output,
+		ref = rules.download_ref_genome_gff.output.fasta,
+	output:
+		temp("results/ALIGNED_FASTA/{sample}.aln")
+	conda:
+		"../envs/gofasta.yaml"
+	threads: 2
+	log:
+		"results/log/align_single_genome_to_ref/{sample}.log"
+	shell:
+		"""
+		minimap2 -a {input.ref} \
+			{input.fasta} > {output} 2> {log}
+		"""
+
+rule create_single_alignment:
+	input:
+		ref = rules.download_ref_genome_gff.output.fasta,
+		sam = rules.align_single_genome_to_ref.output
+	output:
+		"results/ALIGNED_FASTA/{sample}.aln.fasta"
+	conda:
+		"../envs/gofasta.yaml"
+	threads: 2
+	log:
+		"results/log/create_single_alignment/{sample}.log"
+	shell:
+		"""
+		gofasta sam toMultiAlign -o {output} \
+			-r {input.ref} \
+			-s {input.sam} \
+			-t {threads} 2> {log}
+		"""
